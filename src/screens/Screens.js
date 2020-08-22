@@ -16,8 +16,8 @@ const Screens = () => {
     <NavigationContainer>
       <Stack.Navigator>
         <>
-          <Stack.Screen name={screenNames.signIn} component={SignInScreen} />
           <Stack.Screen name={screenNames.main} component={MainScreen} />
+          <Stack.Screen name={screenNames.signIn} component={SignInScreen} />
           <Stack.Screen name={screenNames.conversation} component={ConversationScreen} />
         </>
       </Stack.Navigator>
