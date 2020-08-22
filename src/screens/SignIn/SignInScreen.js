@@ -1,12 +1,14 @@
 import React from 'react'
 import { View, TextInput, StyleSheet, TouchableOpacity, Text } from 'react-native'
 
+import colors from '../../styles/colors'
+
 const styles = StyleSheet.create({
   nameInput: {
     height: 48,
     margin: 24,
     paddingHorizontal: 24,
-    borderColor: '#111111',
+    borderColor: colors.black,
     borderWidth: 1,
   },
   buttonText: {
