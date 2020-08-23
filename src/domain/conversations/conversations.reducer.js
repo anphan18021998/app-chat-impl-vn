@@ -20,6 +20,7 @@ const initialState: State = {
   conversations: {},
 }
 
+/* eslint-disable no-param-reassign */
 const conversationsReducer = produce((draftState: Draft<State>, action: any) => {
   switch (action.type) {
     case actions.types.SET_CONVERSATIONS:
@@ -29,7 +30,9 @@ const conversationsReducer = produce((draftState: Draft<State>, action: any) => 
       }
       break
     case actions.types.SET_CONVERSATION:
-      const conversation: Conversation = action.payload
+      // eslint-disable-next-line no-case-declarations
+      const conversation = action.payload
+      // eslint-disable-next-line no-case-declarations
       const id = conversation._id
       draftState.conversations[id] = {
         ...draftState.conversations[id],

@@ -1,37 +1,39 @@
-import React from 'react'
-import { View, TextInput, StyleSheet, TouchableOpacity, Text } from 'react-native'
+/**
+ * @flow
+ */
 
-import colors from '../../styles/colors'
+import React, { useCallback, useState } from 'react'
+import { StyleSheet } from 'react-native'
+import { useDispatch } from 'react-redux'
+import { Container, Form, Item, Input, Button, Text } from 'native-base'
 
-const styles = StyleSheet.create({
-  nameInput: {
-    height: 48,
-    margin: 24,
-    paddingHorizontal: 24,
-    borderColor: colors.black,
-    borderWidth: 1,
-  },
-  buttonText: {
-    marginLeft: 24,
-    fontSize: 24,
-  },
-  title: {
-    marginTop: 24,
-    marginLeft: 24,
-    fontSize: 24,
-  },
-})
+import actions from './signIn.actions'
 
 const SignInScreen = () => {
+  const [username, setUsername] = useState('')
+  const dispatch = useDispatch()
+  const login = useCallback((name: string) => dispatch(actions.login(name)), [])
+
   return (
-    <View>
-      <Text style={styles.title}>Enter your name:</Text>
-      <TextInput style={styles.nameInput} placeHolder="Your Name" />
-      <TouchableOpacity>
-        <Text style={styles.buttonText}>Next</Text>
-      </TouchableOpacity>
-    </View>
+    <Container>
+      {/* eslint-disable-next-line react-native/no-inline-styles */}
+      <Form style={{ marginTop: 100 }}>
+        <Item>
+          <Input placeholder="username" onChangeText={(text) => setUsername(text)} />
+        </Item>
+        <Button style={styles.loginBtn} onPress={() => login(username)}>
+          <Text>Login</Text>
+        </Button>
+      </Form>
+    </Container>
   )
 }
+
+const styles = StyleSheet.create({
+  loginBtn: {
+    alignSelf: 'center',
+    marginTop: 50,
+  },
+})
 
 export default SignInScreen
