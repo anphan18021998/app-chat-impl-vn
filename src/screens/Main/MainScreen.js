@@ -1,32 +1,71 @@
-import React from 'react'
+import React, { useCallback } from 'react'
+import { useDispatch,useSelector,useDispatch } from 'react-redux'
 import { View, Button, Text, FlatList, StyleSheet } from 'react-native'
 import { Icon } from 'native-base'
 
-// import ConversationItem from './components/conversation-list-item'
-// import Invitation from './components/invitation'
+import authDomain from '../../domain/auth'
+import ConversationItem from './components/conversation-list-item'
+import useSocket from '../../components/socket/Socket'
 
 const MainScreen = () => {
-  return (
-    <>
-      <View>
-        <Button full transparent>
-          <Icon name="add" />
-          <Text>New conversation</Text>
-        </Button>
-      </View>
+  const dispatch = useDispatch()
+  const fetchConversations = useCallback(() => dispatch(actions.fetchConversations()), [])
+  const logout = useCallback(() => dispatch(authDomain.action.logout()), [])
+  const conversations = useSelector(selectors.conversationsSelector)
 
-      <FlatList
-        style={styles.container}
-        data={conversations}
-        renderItem={({ item, index }) => {
-          return <ConversationItem conversation={item} />
-        }}
-        keyExtractor={(item, index) => index.toString()}
-        ListFooterComponent={<Spacing vertical={insets.bottom + 30} />}
-        onRefresh={fetchConversations}
-        refreshing={false}
-      />
-    </>
+  const onButtonPress = useCallback(() => {
+    Alert.prompt(
+      'New conversation',
+      'Enter a username: ',
+      [
+        {
+          text: 'Cancel',
+          style: 'cancel',
+        },
+        {
+          text: 'OK',
+          onPress: (username) => {
+            dispatch(actions.createNewConversation(username || ''))
+          },
+        },
+      ],
+      'plain-text'
+    )
+  }, [])
+
+  const onNewConversation = useCallback(
+    (data) => {
+      dispatch(conversationsDomain.action.setConversation(data.conversation))
+    },
+    [dispatch]
+  )
+  const onNewLastMessage = useCallback(
+    (data) => {
+      dispatch(conversationsDomain.action.addNewMessage({ convId: data.conversation._id, message: data.message }))
+    },
+    [dispatch]
+  )
+
+  useLayoutEffect(() => {
+    navigation.setOptions({
+      headerRight: () => <Button title="new" onPress={onButtonPress} />,
+      headerLeft: () => <Button title="Log out" onPress={logout} />,
+    })
+  }, [])
+
+  useEffect(() => {
+    fetchConversations()
+  }, [])
+
+  useSocket({ eventName: 'newConversation', handler: onNewConversation })
+  useSocket({ eventName: 'newLatestMessage', handler: onNewLastMessage })
+
+  return (
+    <FlatList
+      data={conversations}
+      renderItem={({ item }) => <ConversationItem conversation={item} />}
+      keyExtractor={(item, index) => String(index)}
+    />
   )
 }
 

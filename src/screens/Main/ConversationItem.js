@@ -3,54 +3,55 @@
  */
 
 import React from 'react'
-import { View, Text, Button } from 'native-base'
-import { StyleSheet } from 'react-native'
+import { Text, View, StyleSheet, TouchableOpacity } from 'react-native'
+import { Icon } from 'native-base'
 import { useNavigation } from '@react-navigation/native'
+import { useSelector } from 'react-redux'
 
-import { Spacing, UserAvatar } from '../../component'
-import { colors } from '../../styles'
+import auth from '../../global/auth'
+import screenNames from '../../config/screenNames'
+import chattingModal from '../../global/chatting/chatting.model'
 
 const styles = StyleSheet.create({
-  touchable: {
-    height: 'auto',
-    paddingTop: 0,
-    paddingBottom: 0,
-  },
   container: {
-    paddingVertical: 16,
-    flex: 1,
-    alignItems: 'center',
-    flexDirection: 'row',
-    borderBottomColor: colors.grey50,
-    borderBottomWidth: 1,
-    backgroundColor: colors.white,
+    marginHorizontal: 20,
+    marginVertical: 15,
   },
-  content: {
-    paddingLeft: 16,
+  item: {
+    flexDirection: 'row',
+  },
+  info: {
+    justifyContent: 'center',
   },
   name: {
-    fontSize: 20,
+    fontWeight: '600',
   },
 })
 
-function ConversationListItem({}) {
+type Props = {
+  conversation: Conversation,
+}
+
+const ConversationItem = ({ conversation }: Props) => {
   const navigation = useNavigation()
 
+  const currentUser = useSelector(auth.selectors.currentUser)
+
+  const conversationName = chattingModal.getName(conversation, { currentUser })
+
   return (
-    <Button transparent style={styles.touchable}>
-      <View style={styles.container}>
-        <UserAvatar />
-
-        <View style={styles.content}>
-          <Text style={styles.name}>{'ConsversationName'}</Text>
-
-          <Spacing vertical={2} />
-
-          <LastMessage message={'ConversationLastMessage'} />
+    <TouchableOpacity
+      style={styles.container}
+      onPress={() => navigation.navigate(screenNames.detail, { conversation })}
+    >
+      <View style={styles.item}>
+        <Icon type="FontAwesome" name="user-circle" />
+        <View style={styles.info}>
+          <Text style={styles.name}>{conversationName}</Text>
         </View>
       </View>
-    </Button>
+    </TouchableOpacity>
   )
 }
 
-export default ConversationListItem
+export default ConversationItem

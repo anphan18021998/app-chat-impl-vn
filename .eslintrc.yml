@@ -10,7 +10,8 @@
     "plugin:react-native/all",
     "plugin:prettier/recommended",
     "prettier/react",
-    "plugin:flowtype/recommended"
+    "plugin:flowtype/recommended",
+    "prettier"
   ],
   "globals": {
     "Atomics": "readonly",
@@ -24,7 +25,7 @@
     "ecmaVersion": 11,
     "sourceType": "module"
   },
-  "plugins": ["react", "react-native", "flowtype"],
+  "plugins": ["react", "react-native", "flowtype", "prettier"],
   "settings": {
     "import/resolver": {
       "node": {
@@ -33,6 +34,9 @@
     }
   },
   "rules": {
+    'prettier/prettier':["error", {
+    "endOfLine":"auto"
+    }],
     "no-underscore-dangle": [
       "error",
       {
