@@ -1,10 +1,14 @@
+/**
+ * @flow
+ */
+
 import produce from 'immer'
 import type { Draft } from 'immer'
 import lodash from 'lodash'
 
 import type { Message } from '../../types/local'
 
-import actions from './chatsScreen.actions'
+import actions from './conversations.actions'
 
 export type State = {
   isCreatedSuccessfully: boolean,

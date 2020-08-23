@@ -1,9 +1,12 @@
+/**
+ * @flow
+ */
+
 import { Alert } from 'react-native'
 
-import createApiHandler from '../../domain/auth/createApiHandler'
+import createApiHandler from '../../domain/auth/api-handler'
 import { ConversationApi } from '../../api'
 import conversationActions from '../../domain/conversations/conversations.actions'
-import { Message } from '../../types/local'
 import appLoadingActions from '../../components/AppLoading/appLoading.actions'
 import screenNames from '../../config/screenNames'
 import * as RootNavigation from '../../utils/RootNavigation'
