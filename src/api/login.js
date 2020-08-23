@@ -22,6 +22,4 @@ const login = async (username: string): Promise<Response<any>> => {
   }
 }
 
-export default {
-  login,
-}
+export default login

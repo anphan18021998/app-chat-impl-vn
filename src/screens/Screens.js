@@ -1,27 +1,48 @@
-import React from 'react'
-import { View, Text } from 'react-native'
+/**
+ * @flow
+ */
+
+import React, { useEffect } from 'react'
+import { useSelector } from 'react-redux'
 import { createStackNavigator } from '@react-navigation/stack'
 import { NavigationContainer } from '@react-navigation/native'
 
-import { screenNames } from '../config'
+import authDomain from '../domain/auth'
+import screenNames from '../config/screenNames'
+import { navigationRef } from '../utils/RootNavigation'
+import Socket from '../config/socket'
 
-import ConversationScreen from './Conversation'
-import MainScreen from './Main'
-import SignInScreen from './SignIn'
+import LoginScreen from './SignIn'
+import ChatsScreen from './Main'
+import ChatDetailScreen from './Conversation'
 
 const Stack = createStackNavigator()
 
 const Screens = () => {
+  const isAuthenticated = useSelector(authDomain.selector.getIsAuthenticated)
+  const token = useSelector(authDomain.selector.getAuthHeader)
+
+  useEffect(() => {
+    if (isAuthenticated) {
+      Socket.init({ token })
+    }
+  }, [isAuthenticated])
+
   return (
-    <NavigationContainer>
-      <Stack.Navigator>
-        <>
-          <Stack.Screen name={screenNames.main} component={MainScreen} />
-          <Stack.Screen name={screenNames.signIn} component={SignInScreen} />
-          <Stack.Screen name={screenNames.conversation} component={ConversationScreen} />
-        </>
-      </Stack.Navigator>
-    </NavigationContainer>
+    <>
+      <NavigationContainer ref={navigationRef}>
+        <Stack.Navigator>
+          {isAuthenticated ? (
+            <>
+              <Stack.Screen name={screenNames.chats} component={ChatsScreen} />
+              <Stack.Screen name={screenNames.chatDetail} component={ChatDetailScreen} />
+            </>
+          ) : (
+            <Stack.Screen name={screenNames.login} component={LoginScreen} />
+          )}
+        </Stack.Navigator>
+      </NavigationContainer>
+    </>
   )
 }
 
