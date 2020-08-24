@@ -11,8 +11,8 @@ import { combineReducers } from 'redux'
 import appLoadingReducer from '../components/AppLoading/appLoading.reducer'
 import authDomainReducer from '../domain/auth/auth.reducer'
 import conversationsReducer from '../domain/conversations/conversations.reducer'
-import chatsScreenReducer from '../screens/Main/conversations.reducer'
-import chatDetailReducer from '../screens/Conversation/conversation.reducer'
+import conversationsScreenReducer from '../screens/Main/conversations.reducer'
+import conversationScreenReducer from '../screens/Conversation/conversation.reducer'
 
 import rootActions from './root.actions'
 
@@ -34,8 +34,8 @@ const appReducer = combineReducers({
   auth: persistReducer(authPersistConfig, authDomainReducer),
   conversations: conversationsReducer,
   screens: combineReducers({
-    chats: chatsScreenReducer,
-    chatDetail: chatDetailReducer,
+    chats: conversationsScreenReducer,
+    chatDetail: conversationScreenReducer,
   }),
 })
 
